@@ -12,4 +12,9 @@ class Actor extends Model
         'name',
         'surname',
     ];
+
+    public function movies(){
+        return $this->belongsToMany(Movie::class);
+
+    }
 }

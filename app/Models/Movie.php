@@ -13,4 +13,9 @@ class Movie extends Model
         'category',
         'release_date'
     ];
+
+    public function actors(){
+        return $this->belongsToMany(Actor::class);
+
+    }
 }
