@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Movie;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use App\Http\Requests\StoreMovieRequest;
-use App\Http\Requests\UpdateMovieRequest;
 use App\Models\Actor;
+use App\Models\Movie;
+use App\Models\ProductionCompany;
+use Illuminate\Http\Request;
 
-class MovieController extends Controller
+class ProductionCompanyController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,10 +16,11 @@ class MovieController extends Controller
      */
     public function index()
     {
+        $companies = ProductionCompany::all();
         $movies = Movie::all();
         $actors = Actor::all();
         
-        return view('movies.index', compact('movies', 'actors'));
+        return view('movies.index', compact('movies', 'actors', 'companies'));
     }
 
     /**
@@ -40,59 +39,61 @@ class MovieController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreMovieRequest $request)
+    public function store(Request $request)
     {
         $data = $request->validated();
-        $movie = Movie::create($data);
-        return redirect()->route('movies.show', $movie->id);
-
+        $company = ProductionCompany::create($data);
+        return redirect()->route('companies.show', $company->id);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Movie  $movie
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Movie $movie)
+    public function show($id)
     {
-        return view('movies.show', compact('movie'));
+        return view('companies.show', compact('company'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Movie  $movie
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Movie $movie)
+    public function edit($id)
     {
-        return view('movies.edit', compact('movie'));
+        return view('companies.edit', compact('company'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Movie  $movie
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateMovieRequest $request, Movie $movie)
+    public function update(Request $request, $id)
     {
-        $data = $request->validated();
-        $movie->update($data);
-        return redirect()->route('movies.show', $movie->id);
+        $data = $request->all();
+        $company=ProductionCompany::findOrFail($id);
+        $company->update($data);
+        return redirect()->route('companies.show', $company->id);
+        
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Movie  $movie
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Movie $movie)
+    public function destroy(ProductionCompany $company)
     {
-        $movie->delete();
-        return redirect()->route('movies.index');
+        $company->delete();
+        return redirect()->route('companies.index');
+
     }
 }
