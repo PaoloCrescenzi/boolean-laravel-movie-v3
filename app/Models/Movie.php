@@ -18,4 +18,10 @@ class Movie extends Model
         return $this->belongsToMany(Actor::class);
 
     }
+
+    public function productionCompany(){
+        return $this->belongsTo(ProductionCompany::class);
+
+    }
+
 }
